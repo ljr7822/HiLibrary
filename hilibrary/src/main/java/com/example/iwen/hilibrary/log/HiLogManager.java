@@ -2,6 +2,10 @@ package com.example.iwen.hilibrary.log;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * HiLog的管理类
  *
@@ -11,9 +15,12 @@ import androidx.annotation.NonNull;
 public class HiLogManager {
     private HiLogConfig config;
     private static HiLogManager instance;
+    // 创建数组保存打印器
+    private List<HiLogPrinter> printers = new ArrayList<>();
 
-    private HiLogManager(HiLogConfig config) {
+    private HiLogManager(HiLogConfig config,HiLogPrinter[] printers) {
         this.config = config;
+        this.printers.addAll(Arrays.asList(printers));
     }
 
     /**
@@ -30,12 +37,26 @@ public class HiLogManager {
      *
      * @param config HiLogConfig
      */
-    public static void init(@NonNull HiLogConfig config) {
-        instance = new HiLogManager(config);
+    public static void init(@NonNull HiLogConfig config,HiLogPrinter... printers) {
+        instance = new HiLogManager(config,printers);
     }
 
     public HiLogConfig getConfig(){
         return config;
+    }
+
+    public List<HiLogPrinter> getPrinters(){
+        return printers;
+    }
+
+    public void addPrinter(HiLogPrinter printer){
+        printers.add(printer);
+    }
+
+    public void removePrinter(HiLogPrinter printer){
+        if (printers!=null){
+            printers.remove(printer);
+        }
     }
 
 }
